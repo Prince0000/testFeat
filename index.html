@@ -5,73 +5,224 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple Calculator</title>
     <style>
-      .calculator {
-        width: 300px;
-        margin: 50px auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      #display {
-        width: 100%;
-        height: 40px;
-        margin-bottom: 10px;
-        font-size: 20px;
-        text-align: right;
-        padding: 5px;
+      * {
+        margin: 0;
+        padding: 0;
         box-sizing: border-box;
       }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(45deg, #2c3e50, #3498db);
+      }
+
+      .calculator {
+        width: 100%;
+        max-width: 500px;
+        height: 100vh;
+        padding: 20px;
+        background-color: #34495e;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+      }
+
+      #display {
+        width: 100%;
+        height: 80px;
+        margin-bottom: 20px;
+        font-size: 2.5rem;
+        text-align: right;
+        padding: 10px;
+        background-color: #2c3e50;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+      }
+
       .buttons {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
+        gap: 15px;
+        flex-grow: 1;
       }
+
       button {
-        padding: 10px;
-        font-size: 18px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        background-color: #f0f0f0;
+        padding: 20px;
+        font-size: 1.5rem;
+        border: none;
+        border-radius: 10px;
+        background-color: #2c3e50;
+        color: #fff;
         cursor: pointer;
+        transition: all 0.3s ease;
       }
+
       button:hover {
-        background-color: #e0e0e0;
+        background-color: #243342;
+        transform: scale(0.98);
+      }
+
+      /* Special buttons */
+      button:nth-child(4n) {
+        background-color: #e74c3c;
+      }
+
+      button:nth-child(4n):hover {
+        background-color: #c0392b;
+      }
+
+      button:first-child {
+        background-color: #e67e22;
+      }
+
+      button:first-child:hover {
+        background-color: #d35400;
+      }
+
+      button:last-child {
+        background-color: #27ae60;
+      }
+
+      button:last-child:hover {
+        background-color: #219a52;
+      }
+
+      @media (max-width: 500px) {
+        .calculator {
+          height: 100vh;
+          max-width: 100%;
+        }
+
+        button {
+          padding: 15px;
+          font-size: 1.2rem;
+        }
+      }
+
+      .container {
+        display: flex;
+        width: 100%;
+        height: 100vh;
+      }
+
+      .calculator {
+        width: 500px;
+        height: 100vh;
+        /* Previous calculator styles remain */
+      }
+
+      .drawing-area {
+        flex: 1;
+        background-color: #2c3e50;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      #canvas {
+        background-color: white;
+        border-radius: 10px;
+        cursor: crosshair;
+      }
+
+      .drawing-controls {
+        display: flex;
+        gap: 10px;
+      }
+
+      .drawing-controls button {
+        flex: 1;
+        padding: 10px;
+      }
+
+      #graph {
+        background-color: white;
+        border-radius: 10px;
+        margin-top: 10px;
+      }
+
+      .mode-switch {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .mode-switch button {
+        flex: 1;
+        background-color: #3498db;
+      }
+
+      .mode-switch button.active {
+        background-color: #2980b9;
+      }
+
+      #colorPicker {
+        width: 50px;
+        height: 40px;
+        padding: 0;
+        border: none;
+        border-radius: 5px;
       }
     </style>
   </head>
   <body>
-    <div class="calculator">
-      <input type="text" id="display" readonly />
-      <div class="buttons">
-        <button onclick="clearDisplay()">C</button>
-        <button onclick="appendToDisplay('(')">(</button>
-        <button onclick="appendToDisplay(')')">)</button>
-        <button onclick="appendToDisplay('/')">/</button>
+    <div class="container">
+      <div class="calculator">
+        <input type="text" id="display" readonly />
+        <div class="buttons">
+          <button onclick="clearDisplay()">C</button>
+          <button onclick="appendToDisplay('(')">(</button>
+          <button onclick="appendToDisplay(')')">)</button>
+          <button onclick="appendToDisplay('/')">/</button>
 
-        <button onclick="appendToDisplay('7')">7</button>
-        <button onclick="appendToDisplay('8')">8</button>
-        <button onclick="appendToDisplay('9')">9</button>
-        <button onclick="appendToDisplay('*')">*</button>
+          <button onclick="appendToDisplay('7')">7</button>
+          <button onclick="appendToDisplay('8')">8</button>
+          <button onclick="appendToDisplay('9')">9</button>
+          <button onclick="appendToDisplay('*')">*</button>
 
-        <button onclick="appendToDisplay('4')">4</button>
-        <button onclick="appendToDisplay('5')">5</button>
-        <button onclick="appendToDisplay('6')">6</button>
-        <button onclick="appendToDisplay('-')">-</button>
+          <button onclick="appendToDisplay('4')">4</button>
+          <button onclick="appendToDisplay('5')">5</button>
+          <button onclick="appendToDisplay('6')">6</button>
+          <button onclick="appendToDisplay('-')">-</button>
 
-        <button onclick="appendToDisplay('1')">1</button>
-        <button onclick="appendToDisplay('2')">2</button>
-        <button onclick="appendToDisplay('3')">3</button>
-        <button onclick="appendToDisplay('+')">+</button>
+          <button onclick="appendToDisplay('1')">1</button>
+          <button onclick="appendToDisplay('2')">2</button>
+          <button onclick="appendToDisplay('3')">3</button>
+          <button onclick="appendToDisplay('+')">+</button>
 
-        <button onclick="appendToDisplay('0')">0</button>
-        <button onclick="appendToDisplay('.')">.</button>
-        <button onclick="deleteLastChar()">⌫</button>
-        <button onclick="calculate()">=</button>
+          <button onclick="appendToDisplay('0')">0</button>
+          <button onclick="appendToDisplay('.')">.</button>
+          <button onclick="deleteLastChar()">⌫</button>
+          <button onclick="calculate()">=</button>
+        </div>
+      </div>
+
+      <div class="drawing-area">
+        <div class="mode-switch">
+          <button onclick="switchMode('draw')" class="active">
+            Drawing Mode
+          </button>
+          <button onclick="switchMode('graph')">Graph Mode</button>
+        </div>
+
+        <canvas id="canvas"></canvas>
+        <canvas id="graph" style="display: none"></canvas>
+
+        <div class="drawing-controls">
+          <input type="color" id="colorPicker" value="#000000" />
+          <button onclick="clearCanvas()">Clear</button>
+          <button onclick="downloadDrawing()">Save</button>
+        </div>
       </div>
     </div>
 
     <script>
+      // Calculator functionality
       function appendToDisplay(value) {
         document.getElementById("display").value += value;
       }
@@ -88,10 +239,171 @@
       function calculate() {
         let display = document.getElementById("display");
         try {
-          display.value = eval(display.value);
+          let result = eval(display.value);
+          display.value = result;
+
+          if (currentMode === "graph") {
+            drawGraph(display.value);
+          }
         } catch (error) {
           display.value = "Error";
         }
+      }
+
+      // Drawing functionality
+      const canvas = document.getElementById("canvas");
+      const graph = document.getElementById("graph");
+      const ctx = canvas.getContext("2d");
+      const graphCtx = graph.getContext("2d");
+      let isDrawing = false;
+      let currentMode = "draw";
+
+      // Initialize canvas size on load
+      window.addEventListener("load", () => {
+        resizeCanvas();
+        if (currentMode === "graph") {
+          drawGrid();
+        }
+      });
+
+      function resizeCanvas() {
+        const drawingArea = document.querySelector(".drawing-area");
+        canvas.width = drawingArea.clientWidth - 40;
+        canvas.height = drawingArea.clientHeight - 100;
+        graph.width = canvas.width;
+        graph.height = canvas.height;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+
+      // Drawing event listeners
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseout", stopDrawing);
+
+      function startDrawing(e) {
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = document.getElementById("colorPicker").value;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+
+      function stopDrawing() {
+        isDrawing = false;
+      }
+
+      function clearCanvas() {
+        if (currentMode === "draw") {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          graphCtx.clearRect(0, 0, graph.width, graph.height);
+          drawGrid();
+        }
+      }
+
+      function downloadDrawing() {
+        const link = document.createElement("a");
+        link.download = "drawing.png";
+        link.href =
+          currentMode === "draw" ? canvas.toDataURL() : graph.toDataURL();
+        link.click();
+      }
+
+      function switchMode(mode) {
+        currentMode = mode;
+        const buttons = document.querySelectorAll(".mode-switch button");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        if (mode === "draw") {
+          canvas.style.display = "block";
+          graph.style.display = "none";
+        } else {
+          canvas.style.display = "none";
+          graph.style.display = "block";
+          drawGrid();
+        }
+      }
+
+      // Graphing functionality
+      function drawGrid() {
+        graphCtx.clearRect(0, 0, graph.width, graph.height);
+        const width = graph.width;
+        const height = graph.height;
+        const step = 50;
+
+        graphCtx.strokeStyle = "#ccc";
+        graphCtx.lineWidth = 0.5;
+
+        // Draw grid lines
+        for (let x = 0; x <= width; x += step) {
+          graphCtx.beginPath();
+          graphCtx.moveTo(x, 0);
+          graphCtx.lineTo(x, height);
+          graphCtx.stroke();
+        }
+
+        for (let y = 0; y <= height; y += step) {
+          graphCtx.beginPath();
+          graphCtx.moveTo(0, y);
+          graphCtx.lineTo(width, y);
+          graphCtx.stroke();
+        }
+
+        // Draw axes
+        graphCtx.strokeStyle = "#000";
+        graphCtx.lineWidth = 2;
+        graphCtx.beginPath();
+        graphCtx.moveTo(width / 2, 0);
+        graphCtx.lineTo(width / 2, height);
+        graphCtx.moveTo(0, height / 2);
+        graphCtx.lineTo(width, height / 2);
+        graphCtx.stroke();
+      }
+
+      function drawGraph(expression) {
+        drawGrid();
+        graphCtx.strokeStyle = "#e74c3c";
+        graphCtx.lineWidth = 2;
+        graphCtx.beginPath();
+
+        const width = graph.width;
+        const height = graph.height;
+        const scale = 50; // pixels per unit
+
+        for (let px = 0; px < width; px++) {
+          const x = (px - width / 2) / scale;
+          let y;
+          try {
+            y = -eval(expression.replace(/x/g, `(${x})`));
+            const py = height / 2 + y * scale;
+
+            if (px === 0) {
+              graphCtx.moveTo(px, py);
+            } else {
+              graphCtx.lineTo(px, py);
+            }
+          } catch (e) {
+            continue;
+          }
+        }
+        graphCtx.stroke();
       }
     </script>
   </body>
